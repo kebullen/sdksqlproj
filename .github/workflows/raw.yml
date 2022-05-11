@@ -61,5 +61,5 @@ jobs:
                       /SourceFile:"./sdksqlproj/bin/Debug/sdksqlproj.dacpac"
                       /TargetDatabaseName:${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}}
                       /TargetPassword:${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-pwd}}
-                      /TargetServerName:"${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.azuresynapse.net,1433"
+                      /TargetServerName:"${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net,1433"
                       /TargetUser:${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-name}}
