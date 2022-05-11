@@ -6,23 +6,21 @@
     <ProjectGuid>{62E26360-EDFD-426C-8E92-A7A189C6AA34}</ProjectGuid>
     <DSP>Microsoft.Data.Tools.Schema.Sql.SqlDwDatabaseSchemaProvider</DSP>
     <ModelCollation>1033, CI</ModelCollation>
-  </PropertyGroup> 
+  </PropertyGroup>
   <Target Name="BeforeBuild">
     <Delete Files="$(BaseIntermediateOutputPath)\project.assets.json" />
   </Target>
   <ItemGroup>
-  <Folder Include="ExternalDataSources\" />
-  <Folder Include="ExternalFileFormats\" />
-  <Folder Include="ExternalTables\" />
-  <Folder Include="PostDeployScripts\" />
-  <Folder Include="PreDeployScripts\" />
-  <Folder Include="Schemas\" />
-  <Folder Include="Tables\" />
+    <Folder Include="ExternalDataSources\" />
+    <Folder Include="ExternalFileFormats\" />
+    <Folder Include="ExternalTables\" />
+    <Folder Include="PostDeployScripts\" />
+    <Folder Include="Schemas\" />
   </ItemGroup>
   <!--<ItemGroup>-->
   <!--  <PreDeploy Include="Script.PreDeployment1.sql" />-->
   <!--</ItemGroup>-->
   <!--<ItemGroup>-->
   <!--  <PostDeploy Include="Script.PostDeployment1.sql" />-->
-  <!--</ItemGroup>-->  
+  <!--</ItemGroup>-->
 </Project>
