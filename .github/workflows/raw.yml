@@ -37,7 +37,7 @@ jobs:
         echo "::set-output name=packageJson::$content"
         
     - name: echo synapseWorkspaceName
-      run: echo "${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.azuresynapse.net,1433"
+      run: echo "${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net"
     
     - name: echo synapseDedicatedSQLPool
       run: echo "${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}}"
