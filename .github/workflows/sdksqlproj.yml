@@ -1,0 +1,37 @@
+on: 
+ workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: checkout
+      uses: actions/checkout@v1
+    
+    #question: how to use sql auth
+    - name: aquire sql access token
+      id: sql-login
+      uses: azure/azure-resource-login-action@v1.0.0
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        resource-url: "https://database.windows.net"
+ 
+    - name: dotnet build
+      run: dotnet build './sdksqlproj/sdksqlproj.sqlproj' /p:NetCoreBuild=true
+  
+    #- name: locate profile.publish.xml
+    #  run: locate -b profile.publish.xml
+
+    #- name: find files in work bicep
+    #  run: sudo ls -R /home/runner/work
+
+    - name: deploy dacpac
+      id: deploy-target
+      uses: kebullen/run-sqlpackage-action@v1.1
+      with:
+       action: 'Publish'
+       diagnostics: True
+       authtoken: ${{ steps.sql-login.outputs.token }}
+       profile: './sdksqlproj/profile.publish.xml'
+       sourcepath: './sdksqlproj/bin/Debug'
