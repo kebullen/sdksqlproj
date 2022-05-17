@@ -36,11 +36,11 @@ jobs:
         # end of optional handling for multi line json
         echo "::set-output name=packageJson::$content"
         
-    - name: echo synapseWorkspaceName
-      run: echo "${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net"
+    #- name: echo synapseWorkspaceName
+    #  run: echo "${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net"
     
-    - name: echo synapseDedicatedSQLPool
-      run: echo "${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}}"
+    #- name: echo synapseDedicatedSQLPool
+    #  run: echo "${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}}"
 
     #https://docs.microsoft.com/en-us/azure/developer/github/github-key-vault
     - uses: azure/get-keyvault-secrets@v1

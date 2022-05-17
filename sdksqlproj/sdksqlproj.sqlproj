@@ -13,9 +13,7 @@
   <ItemGroup>
     <Folder Include="ExternalDataSources\" />
     <Folder Include="ExternalFileFormats\" />
-    <Folder Include="ExternalTables\" />
-    <Folder Include="PostDeployScripts\" />
-    <Folder Include="PreDeployScripts\" />    
+    <Folder Include="ExternalTables\" /> 
     <Folder Include="Schemas\" />
     <Folder Include="Tables\" />    
     <Folder Include="Views\" />
