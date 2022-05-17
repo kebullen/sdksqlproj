@@ -21,7 +21,7 @@
     <Folder Include="Views\" />
   </ItemGroup>
   <ItemGroup>
-    <PreDeploy Include="PreDeployScript.sql" />
+    <PreDeploy Include="\PreDeployScripts\PreDeployScript.sql" />
   </ItemGroup>
   <!--<ItemGroup>-->
   <!--  <PostDeploy Include="Script.PostDeployment1.sql" />-->
