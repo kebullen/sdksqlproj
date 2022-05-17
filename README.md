@@ -1,12 +1,18 @@
 # sdksqlproj
 
-Deploying Azure Synapse Dedicated SQL Pools from GitHub Actions (using linux hosted runners).
+Deploying Azure Synapse Dedicated SQL Pools from GitHub Actions (using linux action runners).
 
-## Setup
-Github Account
-Git
-VS Code (Extensions: SQL Database Projects, SQL Server (mssql))
-Azure Account (Synapse Workspace with Dedicated SQL Pool or Dedicated SQL Pool (Formerly SQL DW))
+## Prerequisites
+* Github Account
+* Git
+* VS Code (Extensions: SQL Server (mssql))
+* Azure Account (Synapse Workspace with Dedicated SQL Pool or Dedicated SQL Pool (Formerly SQL DW))
+
+## Create a database project
+Using either Visual Studio, or Visual Studio Code, create a database project (in our case, we're going to create an Azure SQL Database Project)
+
+<img src="./assets/db_project_1.jpg" alt="drawing" style="width:1000px;"/>
+
 
 ## Create an Azure Service Principal for Github
 
