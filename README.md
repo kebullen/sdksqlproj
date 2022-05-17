@@ -2,7 +2,12 @@
 
 Deploying Azure Synapse Dedicated SQL Pools from GitHub Actions (using linux hosted runners).
 
-Setup
+## Setup
+Github Account
+Git
+VS Code (Extensions: SQL Database Projects, SQL Server (mssql))
+Azure Account (Synapse Workspace with Dedicated SQL Pool or Dedicated SQL Pool (Formerly SQL DW))
+
 ## Create an Azure Service Principal for Github
 
 [Create an Azure service principal with the Azure CLI](https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli)
@@ -35,4 +40,11 @@ The output from this command will look something like:
 ```
 Put these values in a safe place, you will need them later. The only time you see these values are when you're createing the Service Principal.
 
+Add the created credentials to Github Secrets:
+In settings, go to Secrets, Actions, "New repository secret", give it a name, and copy the output from the Azure CLI in the Value and click on Add secret.
+
+<img src="./assets/github_2.jpg" alt="drawing" style="width:1000px;"/>
+
 ## Create a database project
+
+## Github Action
