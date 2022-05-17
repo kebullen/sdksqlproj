@@ -13,15 +13,15 @@
   <ItemGroup>
     <Folder Include="ExternalDataSources\" />
     <Folder Include="ExternalFileFormats\" />
-    <Folder Include="ExternalTables\" /> 
+    <Folder Include="ExternalTables\" />
     <Folder Include="Schemas\" />
-    <Folder Include="Tables\" />    
+    <Folder Include="Tables\" />
     <Folder Include="Views\" />
   </ItemGroup>
   <ItemGroup>
     <PreDeploy Include="./PreDeployScripts/PreDeployScript.sql" />
   </ItemGroup>
-  <!--<ItemGroup>-->
-  <!--  <PostDeploy Include="Script.PostDeployment1.sql" />-->
-  <!--</ItemGroup>-->
+  <ItemGroup>
+    <PostDeploy Include="./PostDeployScripts/PostDeployScript.sql" />
+  </ItemGroup>
 </Project>
