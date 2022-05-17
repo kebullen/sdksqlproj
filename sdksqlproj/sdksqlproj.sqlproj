@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build">
+  <Sdk Name="Microsoft.Build.Sql" Version="0.1.3-preview" />
+  <PropertyGroup>
+    <Name>sdksqlproj</Name>
+    <ProjectGuid>{62E26360-EDFD-426C-8E92-A7A189C6AA34}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.SqlDwDatabaseSchemaProvider</DSP>
+    <ModelCollation>1033, CI</ModelCollation>
+  </PropertyGroup>
+  <Target Name="BeforeBuild">
+    <Delete Files="$(BaseIntermediateOutputPath)\project.assets.json" />
+  </Target>
+  <ItemGroup>
+    <Folder Include="ExternalDataSources\" />
+    <Folder Include="ExternalFileFormats\" />
+    <Folder Include="ExternalTables\" />
+    <Folder Include="PostDeployScripts\" />
+    <Folder Include="PreDeployScripts\" />    
+    <Folder Include="Schemas\" />
+    <Folder Include="Tables\" />    
+    <Folder Include="Views\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PreDeploy Include="./PreDeployScripts/PreDeployScript.sql" />
+  </ItemGroup>
+  <!--<ItemGroup>-->
+  <!--  <PostDeploy Include="Script.PostDeployment1.sql" />-->
+  <!--</ItemGroup>-->
+</Project>
