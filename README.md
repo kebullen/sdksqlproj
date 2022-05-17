@@ -1,27 +1,27 @@
 # sdksqlproj
 
-Deploying Azure Synapse Dedicated SQL Pools from GitHub Actions (using linux action runners).
+Deploying Azure Synapse Dedicated SQL Pools from GitHub Actions using Linux hosted runners.
 
 ## Prerequisites
 * Github Account
 * Git
 * VS Code (Extensions: SQL Server (mssql))
-* Azure Account (Synapse Workspace with Dedicated SQL Pool or Dedicated SQL Pool (Formerly SQL DW))
+* Azure Account (with an existing Synapse Workspace with Dedicated SQL Pool or Dedicated SQL Pool (Formerly SQL DW))
 
 ## Create a database project
 Using either Visual Studio, or Visual Studio Code, create a database project (in our case, we're going to create an Azure SQL Database Project):
 
 <img src="./assets/db_project_1.jpg" alt="drawing" style="width:1000px;"/>
 
-We want to choose a SDK-style project. SDK-style projects can be built on Linux action runners. Default SQL Database Projects use .NET 4.8 which isn't supported on Linux.
+We want to choose a SDK-style project. SDK-style projects can be built on Linux hosted runners. Default SQL Database Projects use .NET 4.8 which isn't supported on Linux.
 
 <img src="./assets/db_project_2.jpg" alt="drawing" style="width:1000px;"/>
 
-Once the project is created, change the target platform as required:
+Once the project is created, right click on the database project and change the target platform as required:
 
-<img src="./assets/db_project_3.jpg" alt="drawing" style="width:1000px;"/>
+<img src="./assets/db_project_3.jpg" alt="drawing" style="width:800px;"/>
 
-In our case, we're going to choose Azure 
+In our case, we're going to choose Azure Synapse Dedicated SQL Pool
 
 <img src="./assets/db_project_4.jpg" alt="drawing" style="width:1000px;"/>
 
