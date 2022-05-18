@@ -31,10 +31,11 @@ jobs:
     #    echo "::set-output name=packageJson::$content"
     
     - id: getParams
-      run: $parsed = Get-Content 'msft.synapse.main.params.jso' | ConvertFrom-Json
+      run: $parsed = Get-Content 'msft.synapse.main.params.json' | ConvertFrom-Json
+      shell: pwsh
     
     - id: getParams1
-      run: echo $parsed.parameters.synapseWorkspaceName.value
+      run: echo $($parsed.parameters.synapseWorkspaceName.value)
         
     ##how to read secrets from an Azure keyvault (or possible to use the Service Principal if added to the database as a contained user)
     ##https://docs.microsoft.com/en-us/azure/developer/github/github-key-vault
