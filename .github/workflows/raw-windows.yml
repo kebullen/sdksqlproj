@@ -32,7 +32,9 @@ jobs:
     
     - id: getParams
       run: $parsed = Get-Content 'msft.synapse.main.params.json' | ConvertFrom-Json
-           echo $parsed.synapseWorkspaceName.value
+    
+    - id: getParams1
+        echo $parsed.synapseWorkspaceName.value
            
     #- id: getParams1
     #  run: $junk = Get-Date | Select-Object -Property * | ConvertTo-Json | ConvertFrom-Json
