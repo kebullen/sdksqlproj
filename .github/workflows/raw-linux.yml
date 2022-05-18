@@ -1,0 +1,65 @@
+#links:
+#https://github.com/marketplace/actions/setup-msbuild
+#https://github.com/Azure/run-sqlpackage-action
+#https://github.com/marketplace/actions/run-sqlpackage?version=v1.0.0
+#https://github.com/Azure/azure-resource-login-action
+#https://docs.github.com/en/enterprise-cloud@latest/actions/using-github-hosted-runners/about-github-hosted-runners
+
+#https://docs.microsoft.com/en-us/answers/questions/729421/build-sqlproj-on-linux.html
+#https://www.programmingwithwolfgang.com/deploy-dacpac-linux-azure-devops/
+
+# .github/workflows/sql-deploy.yml
+on: 
+ workflow_dispatch:
+ pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - id: getParams
+      run: |
+        content=`cat ./msft.synapse.main.params.json`
+        # the following lines are only required for multi line json
+        content="${content//'%'/'%25'}"
+        content="${content//$'\n'/'%0A'}"
+        content="${content//$'\r'/'%0D'}"
+        # end of optional handling for multi line json
+        echo "::set-output name=packageJson::$content"
+        
+    #- name: echo synapseWorkspaceName
+    #  run: echo "${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net"
+    
+    #- name: echo synapseDedicatedSQLPool
+    #  run: echo "${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}}"
+
+    #https://docs.microsoft.com/en-us/azure/developer/github/github-key-vault
+    - uses: azure/get-keyvault-secrets@v1
+      with:
+        keyvault: "bicep1-kv" # name of key vault in Azure portal
+        secrets: "bicep-asw-admin-name,bicep-asw-admin-pwd"  # comma separated list of secret keys to fetch from key vault 
+      id: getKeyVaultSecrets # ID for secrets that you will reference
+
+    #linux
+    - name: dotnet build
+      run: dotnet build "./sdksqlproj/sdksqlproj.sqlproj" /p:NetCoreBuild=true
+      
+    #linux
+    - name: run sqlpackage
+      run: sqlpackage /Action:Publish
+                      /p:DropObjectsNotInSource=False
+                      /p:ExcludeObjectType=ExternalFileFormats
+                      /SourceFile:"./sdksqlproj/bin/Debug/sdksqlproj.dacpac"
+                      /TargetDatabaseName:${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}}
+                      /TargetPassword:${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-pwd}}
+                      /TargetServerName:"${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net,1433"
+                      /TargetUser:${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-name}}
