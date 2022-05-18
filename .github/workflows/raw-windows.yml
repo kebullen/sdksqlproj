@@ -4,8 +4,12 @@
 #https://github.com/marketplace/actions/run-sqlpackage?version=v1.0.0
 #https://github.com/Azure/azure-resource-login-action
 
-# .github/workflows/sql-deploy.yml
-on: [push]
+ #workflow_dispatch is run on command
+ workflow_dispatch:
+ #pull request will run on a completed pull request on the branch specifid
+ pull_request:
+    branches:
+      - master
 
 jobs:
   build:
