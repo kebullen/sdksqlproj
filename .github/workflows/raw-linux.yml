@@ -54,7 +54,6 @@ jobs:
       id: getKeyVaultSecrets # ID for secrets that you will reference
 
     #build the project
-    #linux
     - name: dotnet build
       run: dotnet build "./sdksqlproj/sdksqlproj.sqlproj" /p:NetCoreBuild=true
     
