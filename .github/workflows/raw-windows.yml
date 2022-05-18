@@ -35,11 +35,7 @@ jobs:
     
     - id: getParams1
         echo $parsed.synapseWorkspaceName.value
-           
-    #- id: getParams1
-    #  run: $junk = Get-Date | Select-Object -Property * | ConvertTo-Json | ConvertFrom-Json
-    #       echo $junk
-    
+        
     ##how to read secrets from an Azure keyvault (or possible to use the Service Principal if added to the database as a contained user)
     ##https://docs.microsoft.com/en-us/azure/developer/github/github-key-vault
     #- uses: azure/get-keyvault-secrets@v1
