@@ -54,13 +54,15 @@ jobs:
       id: getKeyVaultSecrets # ID for secrets that you will reference
 
     #build the project
+    #linux
     - name: dotnet build
       run: dotnet build "./sdksqlproj/sdksqlproj.sqlproj" /p:NetCoreBuild=true
     
     #run the dacpac
     #/p:ExcludeObjectType=ExternalFileFormats required for external tables, 
     #the dacpac will try and drop the external file format
-    #which causes an error if it's in use. recommend a predeployment script to handle if required
+    #which causes an error if it's in use. 
+    #recommend a predeployment script to handle if required
     #(ie, drop\create the external table)
     - name: run sqlpackage
       run: sqlpackage 
@@ -72,4 +74,3 @@ jobs:
         /TargetPassword:${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-pwd}}
         /TargetServerName:"${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net,1433"
         /TargetUser:${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-name}}
-        
