@@ -31,7 +31,7 @@ jobs:
     #    echo "::set-output name=packageJson::$content"
     
     - id: getParams
-      run: $parsed = ./sdksqlproj/msft.synapse.main.params.json | ConvertFrom-Json
+      run: $parsed = Get-Content ./msft.synapse.main.params.json | ConvertFrom-Json
      
     - name: echo $parsed 
       run: echo $parsed
