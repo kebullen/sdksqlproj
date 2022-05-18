@@ -30,8 +30,9 @@ jobs:
     #    # end of optional handling for multi line json
     #    echo "::set-output name=packageJson::$content"
     
-    - id: getParams
-      run: $content = Get-Content 'msft.synapse.main.params.json'
+    - name: read json params
+      id: getParams
+      run: Get-Content 'msft.synapse.main.params.json'
         echo "::set-output name=packageJson::$content"
     
     #- id: getParams1
