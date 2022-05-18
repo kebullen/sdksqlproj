@@ -31,11 +31,11 @@ jobs:
     #    echo "::set-output name=packageJson::$content"
     
     - id: getParams
-      run: content = Get-Content `msft.synapse.main.params.json`
-        echo "::set-output name=packageJson::$content"
+      run: Get-Content `msft.synapse.main.params.json`
+        #echo "::set-output name=packageJson::$content"
     
-    - id: getParams1
-      run: echo "${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}}"
+    #- id: getParams1
+    #  run: echo "${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}}"
         
     ##how to read secrets from an Azure keyvault (or possible to use the Service Principal if added to the database as a contained user)
     ##https://docs.microsoft.com/en-us/azure/developer/github/github-key-vault
