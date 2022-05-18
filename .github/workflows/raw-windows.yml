@@ -35,6 +35,7 @@ jobs:
     
     - id: getParams1
       run: write-host $parsed.parameters.synapseWorkspaceName.value
+      shell: pwsh
         
     ##how to read secrets from an Azure keyvault (or possible to use the Service Principal if added to the database as a contained user)
     ##https://docs.microsoft.com/en-us/azure/developer/github/github-key-vault
