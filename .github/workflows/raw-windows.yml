@@ -34,7 +34,7 @@ jobs:
       run: $parsed = Get-Content 'msft.synapse.main.params.json' | ConvertFrom-Json
     
     - id: getParams1
-        echo $parsed.synapseWorkspaceName.value
+      run: echo $parsed.synapseWorkspaceName.value
         
     ##how to read secrets from an Azure keyvault (or possible to use the Service Principal if added to the database as a contained user)
     ##https://docs.microsoft.com/en-us/azure/developer/github/github-key-vault
