@@ -32,7 +32,7 @@ jobs:
     
     - id: getParams
       run: Get-Content 'msft.synapse.main.params.json'
-        #echo "::set-output name=packageJson::$content"
+        echo "::set-output name=packageJson::$content"
     
     #- id: getParams1
     #  run: echo "${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}}"
