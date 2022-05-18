@@ -34,7 +34,7 @@ jobs:
       run: Get-Content 'msft.synapse.main.params.json' 
     
     - id: getParams1
-      run: echo ${{fromJson(steps.getParams.outputs).parameters.synapseDedicatedSQLPool.value}}
+      run: echo "${{fromJson(steps.getParams.outputs).parameters.synapseDedicatedSQLPool.value}}"
         
     ##how to read secrets from an Azure keyvault (or possible to use the Service Principal if added to the database as a contained user)
     ##https://docs.microsoft.com/en-us/azure/developer/github/github-key-vault
