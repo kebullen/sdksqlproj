@@ -58,13 +58,7 @@ jobs:
 
     - name: run dotnet build
       run: dotnet build "./sdksqlproj/sdksqlproj.sqlproj" /p:NetCoreBuild=true /p:NETCoreTargetsPath="./" 
-    
-    #- name: add msbuild to path
-    #  uses: microsoft/setup-msbuild@v1.1
-      
-    #- name: build dacpac
-    #  run: msbuild './sdksqlproj/sdksqlproj.sqlproj' -property:DropObjectsNotInSource=false -property:NetCoreBuild=true
-
+ 
     - name: run sqlpackage
       working-directory: C:\Program Files\Microsoft SQL Server\160\DAC\bin\
       run: ./sqlpackage.exe 
