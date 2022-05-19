@@ -66,31 +66,3 @@ jobs:
             /TargetPassword:${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-pwd}}
             /TargetServerName:"${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net,1433"
             /TargetUser:${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-name}}
-    
-    ##- name: aquire sql access token
-    ##  id: sql-login
-    ##  uses: azure/azure-resource-login-action@v1.0.0
-    ##  with:
-    ##    creds: ${{ secrets.AZURE_CREDENTIALS }}
-    ##    resource-url: "https://database.windows.net"
-
-    ##- name: deploy dacpac to database
-    ##  id: deploy-target
-    ##  uses: azure/run-sqlpackage-action@v1.0.0
-    ##  with:
-    ##    action: 'Publish'
-    ##    sourcepath: build
-    ##    profile: profile.xml
-    ##    database-server: bicep-asw.sql.azuresynapse.net
-    ##    database-name: bicepdb
-    ##    authtoken: ${{ steps.sql-login.outputs.token }}
-   
-    ##https://github.com/marketplace/actions/azure-sql-deploy?version=v1.2
-    ##- name: deploy dacpac
-    ##- uses: azure/sql-action@v1.2
-    ##  with:        
-    ##    connection-string: 'Server=tcp:bicep-asw.sql.azuresynapse.net,1433;Initial Catalog=bicepdb;Persist Security Info=False;User ID=;Password=;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
-    ##    project-file: './bicepdb/bicepdb.sqlproj'
-    ##    build-arguments: '-c Release'                  # Optional arguments passed to dotnet build
-    ##    arguments: '/p:DropObjectsNotInSource=false'   # Optional parameters for SqlPackage Publish
-    ##    dacpac-package: './Database.dacpac'
