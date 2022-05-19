@@ -15,8 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
-    #- uses: actions/setup-dotnet@v2
-    
+    # Azure login required to add a temporary firewall rule
     - uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
@@ -43,7 +42,8 @@ jobs:
     #  shell: bash
     #  run: echo "${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}}"
       
-    #how to read secrets from an Azure keyvault (or possible to use the Service Principal if added to the database as a contained user)
+    #how to read secrets from an Azure keyvault 
+    #(or possible to use the Service Principal if added to the database as a contained user)
     #https://docs.microsoft.com/en-us/azure/developer/github/github-key-vault
     - name: read values from keyvault
       uses: azure/get-keyvault-secrets@v1
@@ -52,20 +52,21 @@ jobs:
         secrets: "bicep-asw-admin-name,bicep-asw-admin-pwd"  # comma separated list of secret keys to fetch from key vault 
       id: getKeyVaultSecrets # ID for secrets that you will reference
 
-    #- name: run dotnet build
-    #  run: dotnet build "./sdksqlproj/sdksqlproj.sqlproj" /p:NetCoreBuild=true /p:NETCoreTargetsPath="./" 
- 
+    #working
     #- name: deploy dacpac
     #  uses: azure/sql-action@v1.2
     #  with:
     #    connection-string: "Server=tcp:${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net,1433;Initial Catalog=${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}};User ID=${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-name}};Password=${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-pwd}}"
     #    dacpac-package: "D:\\a\\sdksqlproj\\sdksqlproj\\sdksqlproj\\bin\\Debug\\sdksqlproj.dacpac"
     #    arguments: '/Properties:DropObjectsNotInSource=false /Properties:ExcludeObjectType=ExternalFileFormats' # Optional parameters for SqlPackage Publish
+    #working
 
+    #also working (note the master branch)
     - name: deploy dacpac
       uses: azure/sql-action@master
       with:
         connection-string: "Server=tcp:${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net,1433;Initial Catalog=${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}};User ID=${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-name}};Password=${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-pwd}}"
         project-file: './sdksqlproj/sdksqlproj.sqlproj'
-        build-arguments: '/p:NetCoreBuild=true /p:NETCoreTargetsPath="./"' 
+        build-arguments: '/p:NetCoreBuild=true /p:NETCoreTargetsPath="./"'                                      # Optional arguments passed to dotnet build
         arguments: '/Properties:DropObjectsNotInSource=false /Properties:ExcludeObjectType=ExternalFileFormats' # Optional parameters for SqlPackage Publish
+    #also working (note the master branch)
