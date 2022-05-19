@@ -24,7 +24,7 @@ jobs:
     #example of reading params from a json file (example, a bicep json file)
     - id: getParams
       run: |
-        content=`cat ./msft.synapse.main.params.json`
+        content=`cat ./synapse.main.params.json`
         # the following lines are only required for multi line json
         content="${content//'%'/'%25'}"
         content="${content//$'\n'/'%0A'}"
