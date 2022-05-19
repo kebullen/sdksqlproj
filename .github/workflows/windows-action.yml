@@ -7,10 +7,11 @@
 on:
  #workflow_dispatch is run on command
  workflow_dispatch:
+ #commented for multiple actions examples for the same project
  #pull request will run on a completed pull request on the branch specifid
- pull_request:
-    branches:
-      - master
+ #pull_request:
+ #   branches:
+ #     - master
 
 jobs:
   build:

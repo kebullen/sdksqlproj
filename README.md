@@ -1,13 +1,15 @@
 # sdksqlproj
 
-Deploying Azure Synapse Dedicated SQL Pools from GitHub Actions using Linux hosted runners.
+Deploying Azure Synapse Dedicated SQL Pools from GitHub Actions using GitHub hosted runners.
 
 ## **Prerequisites**
 * Github Account
 * Git
 * VS Code (Extensions: SQL Server (mssql))
 * Azure Account (with an existing Synapse Workspace with Dedicated SQL Pool or Dedicated SQL Pool (Formerly SQL DW))
+* Optional Azure Key Vault for secret storage (otherwise use the Service Principal)
 
+---
 
 ## **Create a database project**
 Using either Visual Studio, or Visual Studio Code, create a database project (in our case, we're going to create an Azure SQL Database Project):
@@ -25,6 +27,8 @@ Once the project is created, right click on the database project and change the 
 In our case, we're going to choose Azure Synapse Dedicated SQL Pool
 
 <img src="./assets/db_project_4.jpg" alt="drawing" style="width:1000px;"/>
+
+---
 
 ## **Create an Azure Service Principal for GitHub**
 
@@ -63,8 +67,9 @@ In settings, go to Secrets, Actions, "New repository secret", give it a name, an
 
 <img src="./assets/github_2.jpg" alt="drawing" style="width:1000px;"/>
 
+---
 
-## **Github Action - Linux Runner**
+## **Github Action**
 To automatically deploy the project, use a GitHub action.
 
 <img src="./assets/github_actions_1.jpg" alt="drawing" style="width:1000px;"/>
@@ -73,84 +78,7 @@ Within your GitHub repo, select Actions from the menu and select "New Workflow" 
 
 <img src="./assets/github_actions_2.jpg" alt="drawing" style="width:1000px;"/>
 
-Name your work flow, and in the edit dialog, replace the sample text with the code below the image:
+Examples included in the repository are:
 
-<img src="./assets/github_actions_3.jpg" alt="drawing" style="width:1000px;"/>
-
-```yaml
-#links:
-#https://github.com/marketplace/actions/setup-msbuild
-#https://github.com/Azure/run-sqlpackage-action
-#https://github.com/marketplace/actions/run-sqlpackage?version=v1.0.0
-#https://github.com/Azure/azure-resource-login-action
-#https://docs.microsoft.com/en-us/answers/questions/729421/build-sqlproj-on-linux.html
-#https://www.programmingwithwolfgang.com/deploy-dacpac-linux-azure-devops/
-
-on: 
- #workflow_dispatch is run on command
- workflow_dispatch:
- #pull request will run on a completed pull request on the branch specifid
- pull_request:
-    branches:
-      - master
-
-jobs:
-  build:
-    #use either windows runners (windows-latest) or Linux (ubuntu-latest)
-    #https://docs.github.com/en/enterprise-cloud@latest/actions/using-github-hosted-runners/about-github-hosted-runners
-    runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v1
-
-    - uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-    #example of reading params from a json file (example, a bicep json file)
-    - id: getParams
-      run: |
-        content=`cat ./msft.synapse.main.params.json`
-        # the following lines are only required for multi line json
-        content="${content//'%'/'%25'}"
-        content="${content//$'\n'/'%0A'}"
-        content="${content//$'\r'/'%0D'}"
-        # end of optional handling for multi line json
-        echo "::set-output name=packageJson::$content"
-    
-    #testing output from the previous command
-    #- name: echo synapseWorkspaceName
-    #  run: echo "${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net"
-    
-    #- name: echo synapseDedicatedSQLPool
-    #  run: echo "${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}}"
-
-    #how to read secrets from an Azure keyvault (or possible to use the Service Principal if added to the database as a contained user)
-    #https://docs.microsoft.com/en-us/azure/developer/github/github-key-vault
-    - uses: azure/get-keyvault-secrets@v1
-      with:
-        keyvault: "bicep1-kv" # name of key vault in Azure portal
-        secrets: "bicep-asw-admin-name,bicep-asw-admin-pwd"  # comma separated list of secret keys to fetch from key vault 
-      id: getKeyVaultSecrets # ID for secrets that you will reference
-
-    #build the project
-    #linux
-    - name: dotnet build
-      run: dotnet build "./sdksqlproj/sdksqlproj.sqlproj" /p:NetCoreBuild=true
-    
-    #run the dacpac
-    #linux
-    - name: run sqlpackage
-      run: sqlpackage 
-        /Action:Publish
-        /p:DropObjectsNotInSource=False
-        #required for external tables, the dacpac will try and drop the external file format
-        #which causes an error if it's in use. recommend a predeployment script to handle if required
-        #(ie, drop\create the external table)
-        /p:ExcludeObjectType=ExternalFileFormats
-        /SourceFile:"./sdksqlproj/bin/Debug/sdksqlproj.dacpac"
-        /TargetDatabaseName:${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}}
-        /TargetPassword:${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-pwd}}
-        /TargetServerName:"${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net,1433"
-        /TargetUser:${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-name}}
-```
+ - raw-linux.yml - A Github Linux hosted runner. raw-linux.yml executes sqlpackage from the Linux hosted runner.
+ - raw-windows.yml - A Github Windows hosted runner. raw-windows.yml executes sqlpackage from the Windows hosted runner.
