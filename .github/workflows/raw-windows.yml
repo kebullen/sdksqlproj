@@ -33,9 +33,13 @@ jobs:
         #- name: read json params
 
     #testing output from the previous command
+    - name: echo synapseWorkspaceName
+      shell: bash
+      run: echo "${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net"
+    
     - name: echo synapseDedicatedSQLPool
       shell: bash
-      run: echo "${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}}.suffix"
+      run: echo "${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}}"
       
     #  id: getParams
     #  run: content = Get-Content 'msft.synapse.main.params.json'
