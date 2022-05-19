@@ -95,8 +95,7 @@ jobs:
 
     - name: deploy dacpac
       uses: azure/sql-action@v1.2
-      with:        
-        server-name: ${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}
-        connection-string: "Server=${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net,1433;Initial Catalog=${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}};Persist Security Info=False;User ID=${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-name}};Password=${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-pwd}};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+      with:
+        connection-string: "Server=tcp:${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net,1433;Initial Catalog=${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}};User ID=${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-name}};Password=${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-pwd}}"
         dacpac-package: "D:\\a\\sdksqlproj\\sdksqlproj\\sdksqlproj\\bin\\Debug\\sdksqlproj.dacpac"
         arguments: '/Properties:DropObjectsNotInSource=false /Properties:ExcludeObjectType=ExternalFileFormats' # Optional parameters for SqlPackage Publish
