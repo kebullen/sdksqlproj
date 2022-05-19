@@ -31,7 +31,6 @@ jobs:
         content="${content//$'\r'/'%0D'}"
         # end of optional handling for multi line json
         echo "::set-output name=packageJson::$content"
-        #- name: read json params
 
     #testing output from the previous command
     #- name: echo synapseWorkspaceName
@@ -53,7 +52,7 @@ jobs:
       id: getKeyVaultSecrets # ID for secrets that you will reference
 
     #https://github.com/Azure/sql-action
-    
+
     #working
     #- uses: actions/setup-dotnet@v2
     #
