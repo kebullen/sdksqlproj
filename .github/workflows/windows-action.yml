@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
-    - uses: actions/setup-dotnet@v2
+    #- uses: actions/setup-dotnet@v2
     
     - uses: azure/login@v1
       with:
@@ -35,13 +35,13 @@ jobs:
         #- name: read json params
 
     #testing output from the previous command
-    - name: echo synapseWorkspaceName
-      shell: bash
-      run: echo "${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net"
+    #- name: echo synapseWorkspaceName
+    #  shell: bash
+    #  run: echo "${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net"
     
-    - name: echo synapseDedicatedSQLPool
-      shell: bash
-      run: echo "${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}}"
+    #- name: echo synapseDedicatedSQLPool
+    #  shell: bash
+    #  run: echo "${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}}"
       
     #how to read secrets from an Azure keyvault (or possible to use the Service Principal if added to the database as a contained user)
     #https://docs.microsoft.com/en-us/azure/developer/github/github-key-vault
@@ -63,7 +63,7 @@ jobs:
     #    arguments: '/Properties:DropObjectsNotInSource=false /Properties:ExcludeObjectType=ExternalFileFormats' # Optional parameters for SqlPackage Publish
 
     - name: deploy dacpac
-      uses: azure/sql-action@v1.2
+      uses: azure/sql-action@master
       with:
         connection-string: "Server=tcp:${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net,1433;Initial Catalog=${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}};User ID=${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-name}};Password=${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-pwd}}"
         project-file: './sdksqlproj/sdksqlproj.sqlproj'
