@@ -32,7 +32,7 @@ jobs:
     
     - name: read json params
       id: getParams
-        echo "::set-output name=packageJson::'msft.synapse.main.params.json'"
+      run: echo "::set-output name=packageJson::'msft.synapse.main.params.json'"
     
           #run: content = Get-Content 'msft.synapse.main.params.json'
       #  echo "content=$content"
