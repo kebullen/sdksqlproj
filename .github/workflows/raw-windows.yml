@@ -20,23 +20,29 @@ jobs:
     - uses: actions/checkout@v1
 
     #example of reading params from a json file (example, a bicep json file)
-    #- id: getParams
-    #  run: |
-    #    content=`cat ./msft.synapse.main.params.json`
-    #    # the following lines are only required for multi line json
-    #    content="${content//'%'/'%25'}"
-    #    content="${content//$'\n'/'%0A'}"
-    #    content="${content//$'\r'/'%0D'}"
-    #    # end of optional handling for multi line json
-    #    echo "::set-output name=packageJson::$content"
+    - id: getParams
+      shell: bash
+      run: |
+        content=`cat ./msft.synapse.main.params.json`
+        # the following lines are only required for multi line json
+        content="${content//'%'/'%25'}"
+        content="${content//$'\n'/'%0A'}"
+        content="${content//$'\r'/'%0D'}"
+        # end of optional handling for multi line json
+        echo "::set-output name=packageJson::$content"
+        #- name: read json params
+
+    #testing output from the previous command
+    - name: echo synapseDedicatedSQLPool
+      shell: bash
+      run: echo "${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}}.suffix"
+      
+    #  id: getParams
+    #  run: content = Get-Content 'msft.synapse.main.params.json'
+    #   echo "::set-output name=packageJson::$content"
     
-    - name: read json params
-      id: getParams
-      run: content = Get-Content 'msft.synapse.main.params.json'
-       echo "::set-output name=packageJson::$content"
-    
-      #run: content = Get-Content 'msft.synapse.main.params.json'
-      #  echo "content=$content"
+     # #run: content = Get-Content 'msft.synapse.main.params.json'
+     # #  echo "content=$content"
       
     #- name: synapseDedicatedSQLPool
     #  run: echo ${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}}
