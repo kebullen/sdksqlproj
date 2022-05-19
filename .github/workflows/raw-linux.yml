@@ -66,8 +66,8 @@ jobs:
     - name: run sqlpackage
       run: sqlpackage 
         /Action:Publish
-        /p:DropObjectsNotInSource=False
-        /p:ExcludeObjectType=ExternalFileFormats
+        /Properties:DropObjectsNotInSource=False
+        /Properties:ExcludeObjectType=ExternalFileFormats
         /SourceFile:"./sdksqlproj/bin/Debug/sdksqlproj.dacpac"
         /TargetDatabaseName:${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}}
         /TargetPassword:${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-pwd}}
