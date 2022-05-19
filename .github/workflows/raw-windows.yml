@@ -21,6 +21,10 @@ jobs:
 
     - uses: actions/setup-dotnet@v2
     
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
     - name: reading params from json file
       id: getParams
       shell: bash
