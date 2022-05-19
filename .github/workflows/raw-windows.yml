@@ -19,8 +19,8 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
-    #example of reading params from a json file (example, a bicep json file)
-    - id: getParams
+    - name: reading params from json file
+      id: getParams
       shell: bash
       run: |
         content=`cat ./msft.synapse.main.params.json`
@@ -51,7 +51,7 @@ jobs:
 
     - uses: actions/setup-dotnet@v2
 
-    - run: dotnet build "./sdksqlproj/sdksqlproj.sqlproj" /p:NETCoreTargetsPath="./"
+    - run: dotnet build "./sdksqlproj/sdksqlproj.sqlproj" /p:NetCoreBuild=true /p:NETCoreTargetsPath="./" 
     
     #- name: add msbuild to path
     #  uses: microsoft/setup-msbuild@v1.1
