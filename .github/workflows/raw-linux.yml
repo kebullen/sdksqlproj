@@ -1,11 +1,3 @@
-#links:
-#https://github.com/marketplace/actions/setup-msbuild
-#https://github.com/Azure/run-sqlpackage-action
-#https://github.com/marketplace/actions/run-sqlpackage?version=v1.0.0
-#https://github.com/Azure/azure-resource-login-action
-#https://docs.microsoft.com/en-us/answers/questions/729421/build-sqlproj-on-linux.html
-#https://www.programmingwithwolfgang.com/deploy-dacpac-linux-azure-devops/
-
 on: 
  #workflow_dispatch is run on command
  workflow_dispatch:
