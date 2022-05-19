@@ -68,7 +68,7 @@ jobs:
     #working
 
     #also working (note the master branch)
-    - name: deploy dacpac
+    - name: build and deploy project
       uses: azure/sql-action@master
       with:
         connection-string: "Server=tcp:${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net,1433;Initial Catalog=${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}};User ID=${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-name}};Password=${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-pwd}}"
