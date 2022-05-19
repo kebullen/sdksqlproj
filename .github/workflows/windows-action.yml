@@ -55,47 +55,17 @@ jobs:
     - name: run dotnet build
       run: dotnet build "./sdksqlproj/sdksqlproj.sqlproj" /p:NetCoreBuild=true /p:NETCoreTargetsPath="./" 
  
-    ##https://docs.microsoft.com/en-us/sql/tools/sqlpackage/sqlpackage?view=sql-server-ver15
-    #- name: run sqlpackage
-    #  working-directory: C:\Program Files\Microsoft SQL Server\160\DAC\bin\
-    #  run: ./sqlpackage.exe 
-    #        /Action:Publish 
-    #        /Properties:ExcludeObjectType=ExternalFileFormats
-    #        /SourceFile:"D:\a\sdksqlproj\sdksqlproj\sdksqlproj\bin\Debug\sdksqlproj.dacpac"
-    #        /TargetDatabaseName:${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}}
-    #        /TargetPassword:${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-pwd}}
-    #        /TargetServerName:"${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net,1433"
-    #        /TargetUser:${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-name}}
-    
-    #- name: aquire sql access token
-    #  id: sql-login
-    #  uses: azure/azure-resource-login-action@v1.0.0
+    #- name: deploy dacpac
+    #  uses: azure/sql-action@v1.2
     #  with:
-    #    creds: ${{ secrets.AZURE_CREDENTIALS }}
-    #    resource-url: "https://database.windows.net"
-
-    #- name: deploy dacpac to database
-    #  id: deploy-target
-    #  uses: azure/run-sqlpackage-action@v1.0.0
-    #  with:
-    #    action: 'Publish'
-    #    sourcepath: "D:\\a\\sdksqlproj\\sdksqlproj\\sdksqlproj\\bin\\Debug\\sdksqlproj.dacpac"
-    #    profile: "./sdksqlproj/profile.publish.xml"
-    #    database-server: "${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net,1433"
-    #    database-name: ${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}}
-    #    authtoken: ${{ steps.sql-login.outputs.token }}
-   
-    #https://github.com/marketplace/actions/azure-sql-deploy?version=v1.2
-    #        connection-string: 'Server=tcp:bicep-asw.sql.azuresynapse.net,1433;Initial Catalog=bicepdb;Persist Security Info=False;User ID=;Password=;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
-    
-    #Warning: Unexpected input(s) 'project-file', 'build-arguments', 
-    #         valid inputs are ['server-name', 'connection-string', 'dacpac-package', 'sql-file', 'arguments']
-    - name: check connection string
-      run: echo "Server=${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net,1433;Initial Catalog=${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}};Persist Security Info=False;User ID=${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-name}};Password=${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-pwd}};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+    #    connection-string: "Server=tcp:${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net,1433;Initial Catalog=${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}};User ID=${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-name}};Password=${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-pwd}}"
+    #    dacpac-package: "D:\\a\\sdksqlproj\\sdksqlproj\\sdksqlproj\\bin\\Debug\\sdksqlproj.dacpac"
+    #    arguments: '/Properties:DropObjectsNotInSource=false /Properties:ExcludeObjectType=ExternalFileFormats' # Optional parameters for SqlPackage Publish
 
     - name: deploy dacpac
       uses: azure/sql-action@v1.2
       with:
         connection-string: "Server=tcp:${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net,1433;Initial Catalog=${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}};User ID=${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-name}};Password=${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-pwd}}"
-        dacpac-package: "D:\\a\\sdksqlproj\\sdksqlproj\\sdksqlproj\\bin\\Debug\\sdksqlproj.dacpac"
+        project-file: './sdksqlproj/sdksqlproj.sqlproj'
+        build-arguments: '/p:NetCoreBuild=true /p:NETCoreTargetsPath="./"' 
         arguments: '/Properties:DropObjectsNotInSource=false /Properties:ExcludeObjectType=ExternalFileFormats' # Optional parameters for SqlPackage Publish
