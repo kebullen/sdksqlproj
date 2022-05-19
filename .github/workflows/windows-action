@@ -1,0 +1,100 @@
+#links:
+#https://github.com/marketplace/actions/setup-msbuild
+#https://github.com/Azure/run-sqlpackage-action
+#https://github.com/marketplace/actions/run-sqlpackage?version=v1.0.0
+#https://github.com/Azure/azure-resource-login-action
+
+on:
+ #workflow_dispatch is run on command
+ workflow_dispatch:
+ #pull request will run on a completed pull request on the branch specifid
+ pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+
+    - uses: actions/setup-dotnet@v2
+    
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    - name: reading params from json file
+      id: getParams
+      shell: bash
+      run: |
+        content=`cat ./msft.synapse.main.params.json`
+        # the following lines are only required for multi line json
+        content="${content//'%'/'%25'}"
+        content="${content//$'\n'/'%0A'}"
+        content="${content//$'\r'/'%0D'}"
+        # end of optional handling for multi line json
+        echo "::set-output name=packageJson::$content"
+        #- name: read json params
+
+    #testing output from the previous command
+    - name: echo synapseWorkspaceName
+      shell: bash
+      run: echo "${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net"
+    
+    - name: echo synapseDedicatedSQLPool
+      shell: bash
+      run: echo "${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}}"
+      
+    #how to read secrets from an Azure keyvault (or possible to use the Service Principal if added to the database as a contained user)
+    #https://docs.microsoft.com/en-us/azure/developer/github/github-key-vault
+    - name: read values from keyvault
+      uses: azure/get-keyvault-secrets@v1
+      with:
+        keyvault: "bicep1-kv" # name of key vault in Azure portal
+        secrets: "bicep-asw-admin-name,bicep-asw-admin-pwd"  # comma separated list of secret keys to fetch from key vault 
+      id: getKeyVaultSecrets # ID for secrets that you will reference
+
+    - name: run dotnet build
+      run: dotnet build "./sdksqlproj/sdksqlproj.sqlproj" /p:NetCoreBuild=true /p:NETCoreTargetsPath="./" 
+ 
+    ##https://docs.microsoft.com/en-us/sql/tools/sqlpackage/sqlpackage?view=sql-server-ver15
+    #- name: run sqlpackage
+    #  working-directory: C:\Program Files\Microsoft SQL Server\160\DAC\bin\
+    #  run: ./sqlpackage.exe 
+    #        /Action:Publish 
+    #        /Properties:ExcludeObjectType=ExternalFileFormats
+    #        /SourceFile:"D:\a\sdksqlproj\sdksqlproj\sdksqlproj\bin\Debug\sdksqlproj.dacpac"
+    #        /TargetDatabaseName:${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}}
+    #        /TargetPassword:${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-pwd}}
+    #        /TargetServerName:"${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net,1433"
+    #        /TargetUser:${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-name}}
+    
+    - name: aquire sql access token
+      id: sql-login
+      uses: azure/azure-resource-login-action@v1.0.0
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        resource-url: "https://database.windows.net"
+
+    - name: deploy dacpac to database
+      id: deploy-target
+      uses: azure/run-sqlpackage-action@v1.0.0
+      with:
+        action: 'Publish'
+        sourcepath: "D:\a\sdksqlproj\sdksqlproj\sdksqlproj\bin\Debug\sdksqlproj.dacpac"
+        profile: "./sdksqlproj/profile.publish.xml"
+        database-server: "${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net,1433"
+        database-name: ${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}}
+        authtoken: ${{ steps.sql-login.outputs.token }}
+   
+    ##https://github.com/marketplace/actions/azure-sql-deploy?version=v1.2
+    ##- name: deploy dacpac
+    ##- uses: azure/sql-action@v1.2
+    ##  with:        
+    ##    connection-string: 'Server=tcp:bicep-asw.sql.azuresynapse.net,1433;Initial Catalog=bicepdb;Persist Security Info=False;User ID=;Password=;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+    ##    project-file: './bicepdb/bicepdb.sqlproj'
+    ##    build-arguments: '-c Release'                  # Optional arguments passed to dotnet build
+    ##    arguments: '/p:DropObjectsNotInSource=false'   # Optional parameters for SqlPackage Publish
+    ##    dacpac-package: './Database.dacpac'
