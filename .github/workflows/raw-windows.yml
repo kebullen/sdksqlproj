@@ -53,7 +53,7 @@ jobs:
       uses: microsoft/setup-msbuild@v1.1
       
     - name: build dacpac
-      run: msbuild './sdksqlproj/sdksqlproj.sqlproj' -property:DropObjectsNotInSource=false -verbosity:diag
+      run: msbuild './sdksqlproj/sdksqlproj.sqlproj' -property:DropObjectsNotInSource=false -verbosity:diag /p:NetCoreBuild=true
 
     - name: run sqlpackage
       working-directory: C:\Program Files\Microsoft SQL Server\160\DAC\bin\
