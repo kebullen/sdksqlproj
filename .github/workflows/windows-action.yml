@@ -52,7 +52,14 @@ jobs:
         secrets: "bicep-asw-admin-name,bicep-asw-admin-pwd"  # comma separated list of secret keys to fetch from key vault 
       id: getKeyVaultSecrets # ID for secrets that you will reference
 
+    #https://github.com/Azure/sql-action
+    
     #working
+    #- uses: actions/setup-dotnet@v2
+    #
+    #- name: run dotnet build
+    #  run: dotnet build "./sdksqlproj/sdksqlproj.sqlproj" /p:NetCoreBuild=true /p:NETCoreTargetsPath="./"     
+    #
     #- name: deploy dacpac
     #  uses: azure/sql-action@v1.2
     #  with:
