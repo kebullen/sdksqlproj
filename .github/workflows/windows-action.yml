@@ -79,7 +79,7 @@ jobs:
       uses: azure/run-sqlpackage-action@v1.0.0
       with:
         action: 'Publish'
-        sourcepath: "D:\a\sdksqlproj\sdksqlproj\sdksqlproj\bin\Debug\sdksqlproj.dacpac"
+        sourcepath: "D:\\a\\sdksqlproj\\sdksqlproj\\sdksqlproj\\bin\\Debug\\sdksqlproj.dacpac"
         profile: "./sdksqlproj/profile.publish.xml"
         database-server: "${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net,1433"
         database-name: ${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}}
