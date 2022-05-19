@@ -19,6 +19,8 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
+    - uses: actions/setup-dotnet@v2
+    
     - name: reading params from json file
       id: getParams
       shell: bash
@@ -43,15 +45,15 @@ jobs:
       
     #how to read secrets from an Azure keyvault (or possible to use the Service Principal if added to the database as a contained user)
     #https://docs.microsoft.com/en-us/azure/developer/github/github-key-vault
-    #- uses: azure/get-keyvault-secrets@v1
-    #  with:
-    #    keyvault: "bicep1-kv" # name of key vault in Azure portal
-    #    secrets: "bicep-asw-admin-name,bicep-asw-admin-pwd"  # comma separated list of secret keys to fetch from key vault 
-    #  id: getKeyVaultSecrets # ID for secrets that you will reference
+    - name: read values from keyvault
+      uses: azure/get-keyvault-secrets@v1
+      with:
+        keyvault: "bicep1-kv" # name of key vault in Azure portal
+        secrets: "bicep-asw-admin-name,bicep-asw-admin-pwd"  # comma separated list of secret keys to fetch from key vault 
+      id: getKeyVaultSecrets # ID for secrets that you will reference
 
-    - uses: actions/setup-dotnet@v2
-
-    - run: dotnet build "./sdksqlproj/sdksqlproj.sqlproj" /p:NetCoreBuild=true /p:NETCoreTargetsPath="./" 
+    - name: run dotnet build
+      run: dotnet build "./sdksqlproj/sdksqlproj.sqlproj" /p:NetCoreBuild=true /p:NETCoreTargetsPath="./" 
     
     #- name: add msbuild to path
     #  uses: microsoft/setup-msbuild@v1.1
@@ -59,15 +61,15 @@ jobs:
     #- name: build dacpac
     #  run: msbuild './sdksqlproj/sdksqlproj.sqlproj' -property:DropObjectsNotInSource=false -property:NetCoreBuild=true
 
-    #- name: run sqlpackage
-    #  working-directory: C:\Program Files\Microsoft SQL Server\160\DAC\bin\
-    #  run: ./sqlpackage.exe 
-    #        /Action:Publish 
-    #        /SourceFile:".\sdksqlproj\bin\Debug\sdksqlproj.dacpac"
-    #        /TargetDatabaseName:${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}}
-    #        /TargetPassword:${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-pwd}}
-    #        /TargetServerName:"${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net,1433"
-    #        /TargetUser:${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-name}}
+    - name: run sqlpackage
+      working-directory: C:\Program Files\Microsoft SQL Server\160\DAC\bin\
+      run: ./sqlpackage.exe 
+            /Action:Publish 
+            /SourceFile:".\sdksqlproj\bin\Debug\sdksqlproj.dacpac"
+            /TargetDatabaseName:${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}}
+            /TargetPassword:${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-pwd}}
+            /TargetServerName:"${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net,1433"
+            /TargetUser:${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-name}}
     
     ##- name: aquire sql access token
     ##  id: sql-login
