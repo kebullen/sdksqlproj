@@ -67,12 +67,12 @@ jobs:
     #    arguments: '/Properties:DropObjectsNotInSource=false /Properties:ExcludeObjectType=ExternalFileFormats' # Optional parameters for SqlPackage Publish
     #working
 
-    #also working (note the master branch)
+    #also working
     - name: build and deploy project
-      uses: azure/sql-action@master
+      uses: azure/sql-action@v1.3
       with:
         connection-string: "Server=tcp:${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net,1433;Initial Catalog=${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}};User ID=${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-name}};Password=${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-pwd}}"
         project-file: './sdksqlproj/sdksqlproj.sqlproj'
         build-arguments: '/p:NetCoreBuild=true /p:NETCoreTargetsPath="./"'                                      # Optional arguments passed to dotnet build
         arguments: '/Properties:DropObjectsNotInSource=false /Properties:ExcludeObjectType=ExternalFileFormats' # Optional parameters for SqlPackage Publish
-    #also working (note the master branch)
+    #also working
