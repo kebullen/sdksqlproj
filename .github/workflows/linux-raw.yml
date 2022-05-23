@@ -21,7 +21,7 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    #example of reading params from a json file (example, a bicep json file)
+    #reading params from a json file (example, a bicep json file)
     - id: getParams
       run: |
         content=`cat ./synapse.main.params.json`
@@ -48,22 +48,55 @@ jobs:
       id: getKeyVaultSecrets # ID for secrets that you will reference
 
     #build the project
+    #dotnet build options: https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-build#options
     - name: dotnet build
       run: dotnet build "./sdksqlproj/sdksqlproj.sqlproj" /p:NetCoreBuild=true
     
+    ####################
+    ##sql auth (working)
+    ##run the dacpac
+    ##/p:ExcludeObjectType=ExternalFileFormats required for external tables, 
+    ##the dacpac will try and drop the external file format
+    ##which causes an error if it's in use. 
+    ##recommend a predeployment script to handle if required
+    ##(ie, drop\create the external table)
+    ##sqlpackage parameters https://docs.microsoft.com/en-us/sql/tools/sqlpackage/sqlpackage-publish?view=sql-server-ver15#parameters-for-the-publish-action
+    #- name: run sqlpackage
+    #  run: sqlpackage 
+    #    /Action:Publish
+    #    /Properties:DropObjectsNotInSource=False
+    #    /Properties:ExcludeObjectType=ExternalFileFormats
+    #    /SourceFile:"./sdksqlproj/bin/Debug/sdksqlproj.dacpac"
+    #    /TargetDatabaseName:${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}}
+    #    /TargetPassword:${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-pwd}}
+    #    /TargetServerName:"${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net,1433"
+    #    /TargetUser:${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-name}}
+    ####################
+
+    ####################
+    ##aad auth (working)
+    #https://github.com/Azure/azure-resource-login-action
+    id: sql-login
+    name: Adquiring SQL Access Token
+    uses: Azure/azure-resource-login-action@v1.0.0
+    with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        resource-url: "https://database.windows.net"
+
     #run the dacpac
     #/p:ExcludeObjectType=ExternalFileFormats required for external tables, 
     #the dacpac will try and drop the external file format
     #which causes an error if it's in use. 
     #recommend a predeployment script to handle if required
     #(ie, drop\create the external table)
+    #sqlpackage parameters https://docs.microsoft.com/en-us/sql/tools/sqlpackage/sqlpackage-publish?view=sql-server-ver15#parameters-for-the-publish-action
     - name: run sqlpackage
       run: sqlpackage 
         /Action:Publish
+        /AccessToken:${{steps.sql-login.outputs.token}}
         /Properties:DropObjectsNotInSource=False
         /Properties:ExcludeObjectType=ExternalFileFormats
         /SourceFile:"./sdksqlproj/bin/Debug/sdksqlproj.dacpac"
         /TargetDatabaseName:${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}}
-        /TargetPassword:${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-pwd}}
-        /TargetServerName:"${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net,1433"
-        /TargetUser:${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-name}}
+        /TargetServerName:"${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net,1433" 
+    ####################

@@ -21,7 +21,7 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    #example of reading params from a json file (example, a bicep json file)
+    #reading params from a json file (example, a bicep json file)
     - id: getParams
       run: |
         content=`cat ./synapse.main.params.json`
@@ -48,6 +48,8 @@ jobs:
       id: getKeyVaultSecrets # ID for secrets that you will reference
 
     #https://github.com/Azure/sql-action
+    #sqlpackage params https://docs.microsoft.com/en-us/sql/tools/sqlpackage/sqlpackage-publish?view=sql-server-ver15#parameters-for-the-publish-action
+    #dotnet build options: https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-build#options
 
     #working
     #- uses: actions/setup-dotnet@v2
@@ -56,7 +58,7 @@ jobs:
     #  run: dotnet build "./sdksqlproj/sdksqlproj.sqlproj" /p:NetCoreBuild=true /p:NETCoreTargetsPath="./"     
     #
     #- name: deploy dacpac
-    #  uses: azure/sql-action@v1.2
+    #  uses: azure/sql-action@v1.3
     #  with:
     #    connection-string: "Server=tcp:${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net,1433;Initial Catalog=${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}};User ID=${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-name}};Password=${{steps.getKeyVaultSecrets.outputs.bicep-asw-admin-pwd}}"
     #    dacpac-package: "D:\\a\\sdksqlproj\\sdksqlproj\\sdksqlproj\\bin\\Debug\\sdksqlproj.dacpac"
