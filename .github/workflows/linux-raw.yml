@@ -19,7 +19,7 @@ jobs:
 
     - uses: azure/login@v1
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        creds: ${{secrets.AZURE_CREDENTIALS}}
 
     #reading params from a json file (example, a bicep json file)
     - id: getParams
@@ -80,7 +80,7 @@ jobs:
     name: Adquiring SQL Access Token
     uses: Azure/azure-resource-login-action@v1.0.0
     with:
-      creds: ${{ secrets.AZURE_CREDENTIALS }}
+      creds: ${{secrets.AZURE_CREDENTIALS}}
       resource-url: "https://database.windows.net"
 
     #run the dacpac
@@ -93,7 +93,6 @@ jobs:
     - name: run sqlpackage
       run: sqlpackage 
         /Action:Publish
-        /AccessToken:${{steps.sql-login.outputs.token}}
         /Properties:DropObjectsNotInSource=False
         /Properties:ExcludeObjectType=ExternalFileFormats
         /SourceFile:"./sdksqlproj/bin/Debug/sdksqlproj.dacpac"

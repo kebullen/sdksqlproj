@@ -19,7 +19,7 @@ jobs:
 
     - uses: azure/login@v1
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        creds: ${{secrets.AZURE_CREDENTIALS}}
 
     #reading params from a json file (example, a bicep json file)
     - id: getParams
