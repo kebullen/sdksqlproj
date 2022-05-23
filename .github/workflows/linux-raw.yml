@@ -45,8 +45,8 @@ jobs:
 
     #how to read secrets from an Azure keyvault (or possible to use the Service Principal if added to the database as a contained user)
     #https://docs.microsoft.com/en-us/azure/developer/github/github-key-vault
-    - id: getKeyVaultSecrets # ID for secrets that you will reference
-      name: get azure key vault secrets
+    - name: get azure key vault secrets
+      id: getKeyVaultSecrets # ID for secrets that you will reference
       uses: azure/get-keyvault-secrets@v1
       with:
         keyvault: "${{fromJson(steps.getParams.outputs.packageJson).parameters.keyVault.value}}" #name of key vault in Azure portal
@@ -85,9 +85,9 @@ jobs:
     #create user [bicepsqldeployserviceprincipal] from EXTERNAL provider;
     #sp_addrolemember 'db_owner', 'bicepsqldeployserviceprincipal' #some credentials, db_ddladmin, db_datareader, db_datawriter may be enough
 
-    - id: sql-login
+    - name: aquiring sql access token
+      id: sql-login
       uses: azure/azure-resource-login-action@v1.0.0
-      name: aquiring sql access token
       with:
         creds: ${{secrets.AZURE_CREDENTIALS}}
         resource-url: "https://database.windows.net"
