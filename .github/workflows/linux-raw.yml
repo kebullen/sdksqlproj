@@ -76,12 +76,12 @@ jobs:
     ####################
     ##aad auth (working)
     #https://github.com/Azure/azure-resource-login-action
-    id: sql-login
-    name: Adquiring SQL Access Token
-    uses: Azure/azure-resource-login-action@v1.0.0
-    with:
-      creds: ${{secrets.AZURE_CREDENTIALS}}
-      resource-url: "https://database.windows.net"
+    - id: sql-login
+      name: aquiring sql access token
+      uses: Azure/azure-resource-login-action@v1.0.0
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS}}
+        resource-url: "https://database.windows.net"
 
     #run the dacpac
     #/p:ExcludeObjectType=ExternalFileFormats required for external tables, 
