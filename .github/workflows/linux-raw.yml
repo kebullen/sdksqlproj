@@ -95,7 +95,7 @@ jobs:
     - name: run sqlpackage
       run: sqlpackage 
         /Action:Publish
-        /AccessToken: ${{steps.sql-login.outputs.token}}
+        /AccessToken:${{steps.sql-login.outputs.token}}
         /Properties:DropObjectsNotInSource=False
         /Properties:ExcludeObjectType=ExternalFileFormats
         /SourceFile:"./sdksqlproj/bin/Debug/sdksqlproj.dacpac"
