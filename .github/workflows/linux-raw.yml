@@ -15,9 +15,12 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+
     - uses: actions/checkout@v1
+      name: github checkout
 
     - uses: azure/login@v1
+      name: azure login
       with:
         creds: ${{secrets.AZURE_CREDENTIALS}}
 
@@ -42,8 +45,9 @@ jobs:
 
     #how to read secrets from an Azure keyvault (or possible to use the Service Principal if added to the database as a contained user)
     #https://docs.microsoft.com/en-us/azure/developer/github/github-key-vault
-    - uses: azure/get-keyvault-secrets@v1
-      id: getKeyVaultSecrets # ID for secrets that you will reference
+    - id: getKeyVaultSecrets # ID for secrets that you will reference
+      name: get azure key vault secrets
+      uses: azure/get-keyvault-secrets@v1
       with:
         keyvault: "${{fromJson(steps.getParams.outputs.packageJson).parameters.keyVault.value}}" #name of key vault in Azure portal
         secrets: "${{fromJson(steps.getParams.outputs.packageJson).parameters.keyVaultUserSecret.value}},${{fromJson(steps.getParams.outputs.packageJson).parameters.keyVaultPwdSecret.value}}"  #comma separated list of secret keys to fetch from key vault 
@@ -82,8 +86,8 @@ jobs:
     #sp_addrolemember 'db_owner', 'bicepsqldeployserviceprincipal' #some credentials, db_ddladmin, db_datareader, db_datawriter may be enough
 
     - id: sql-login
-      name: aquiring sql access token
       uses: azure/azure-resource-login-action@v1.0.0
+      name: aquiring sql access token
       with:
         creds: ${{secrets.AZURE_CREDENTIALS}}
         resource-url: "https://database.windows.net"
