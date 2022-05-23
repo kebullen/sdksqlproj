@@ -101,9 +101,10 @@ jobs:
         /SourceFile:"./sdksqlproj/bin/Debug/sdksqlproj.dacpac"
         /TargetDatabaseName:${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseDedicatedSQLPool.value}}
         /TargetServerName:"${{fromJson(steps.getParams.outputs.packageJson).parameters.synapseWorkspaceName.value}}.sql.azuresynapse.net,1433" 
+    ##aad auth (working)
 
     #https://github.com/Azure/login#az-logout-and-security-hardening
-    - name: zz logout and security hardening
+    - name: az logout and security hardening
       uses: azure/CLI@v1
       with:
         inlineScript: |
