@@ -7,7 +7,16 @@
       },
       "synapseDedicatedSQLPool": {
         "value": "sqlproj"
-      }
+      },
+      "keyVault": {
+        "value": "bicep1-kv"
+      },   
+      "keyVaultUserSecret": {
+        "value": "bicep-asw-admin-name"
+      }, 
+      "keyVaultPwdSecret": {
+        "value": "bicep-asw-admin-pwd"
+      }               
   }
 }
   
