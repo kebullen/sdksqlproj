@@ -48,6 +48,7 @@ jobs:
       id: getKeyVaultSecrets # ID for secrets that you will reference
 
     #https://github.com/Azure/sql-action
+    #https://github.com/Azure/sql-action/issues/93 - open issue for using managed identity for sql login
     #sqlpackage params https://docs.microsoft.com/en-us/sql/tools/sqlpackage/sqlpackage-publish?view=sql-server-ver15#parameters-for-the-publish-action
     #dotnet build options: https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-build#options
 
