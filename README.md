@@ -60,7 +60,7 @@ The output from this command will look something like:
   "managementEndpointUrl": "https://management.core.windows.net/"
 }
 ```
-Put these values in a safe place, you will need them later. The only time you see these values are when you're createing the Service Principal.
+Put these values in a safe place, you will need them later. The only time you see these values are when you're creating the Service Principal.
 
 Add the created credentials to Github Secrets:
 In settings, go to Secrets, Actions, "New repository secret", give it a name, and copy the output from the Azure CLI in the Value and click on Add secret.
