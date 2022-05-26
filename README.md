@@ -70,7 +70,7 @@ In settings, go to Secrets, Actions, "New repository secret", give it a name, an
 ---
 
 ## **Github Action**
-To automatically deploy the project, use a GitHub action.
+To deploy the project, use a GitHub action.
 
 <img src="./assets/github_actions_1.jpg" alt="drawing" style="width:1000px;"/>
 
@@ -78,12 +78,12 @@ Within your GitHub repo, select Actions from the menu and select "New Workflow" 
 
 <img src="./assets/github_actions_2.jpg" alt="drawing" style="width:1000px;"/>
 
-Action examples in the repository include:
+Example actions in the repository include:
 
- - linux-action.yml - A Github Linux hosted runner. [linux-action.yml](https://github.com/kebullen/sdksqlproj/blob/main/.github/workflows/linux-action.yml) executes the Azure [sql-action](https://github.com/Azure/sql-action) from the Linux hosted runner.
+ - linux-action.yml - A Github Linux hosted runner. [linux-action.yml](https://github.com/kebullen/sdksqlproj/blob/main/.github/workflows/linux-action.yml) featuring the Azure [sql-action](https://github.com/Azure/sql-action) from the Linux hosted runner.
  
  - linux-raw.yml - A Github Linux hosted runner. [linux-raw.yml](https://github.com/kebullen/sdksqlproj/blob/main/.github/workflows/linux-raw.yml) builds the .NET project and executes sqlpackage from the Linux hosted runner.
 
- - windows-action.yml - A Github Windows hosted runner. [windows-action.yml](https://github.com/kebullen/sdksqlproj/blob/main/.github/workflows/windows-action.yml) executes the Azure [sql-action](https://github.com/Azure/sql-action) from the Windows hosted runner.
+ - windows-action.yml - A Github Windows hosted runner. [windows-action.yml](https://github.com/kebullen/sdksqlproj/blob/main/.github/workflows/windows-action.yml) featuring the Azure [sql-action](https://github.com/Azure/sql-action) from the Windows hosted runner.
 
  - windows-raw.yml - A Github Windows hosted runner. [windows-raw.yml](https://github.com/kebullen/sdksqlproj/blob/main/.github/workflows/windows-raw.yml) builds the .NET project and executes sqlpackage from the Windows hosted runner.
