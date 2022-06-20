@@ -2,5 +2,4 @@
 IF EXISTS(SELECT *
           FROM sys.views v JOIN sys.schemas s ON v.schema_id = s.schema_id
           WHERE v.[name] = 'View1' and s.[name] = 'dbo')
-    DROP VIEW dbo.View1
-    
+    DROP VIEW dbo.View1    

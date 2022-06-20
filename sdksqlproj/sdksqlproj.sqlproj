@@ -20,5 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <PreDeploy Include="Script.PreDeployment1.sql" />
+    <None Include="YetMoreData2.sql" />
   </ItemGroup>
 </Project>
