@@ -70,6 +70,7 @@ jobs:
     #    arguments: '/Properties:DropObjectsNotInSource=false /Properties:ExcludeObjectType=ExternalFileFormats' # Optional parameters for SqlPackage Publish
     #working
 
+    #building a database project from the command line: https://docs.microsoft.com/en-us/sql/azure-data-studio/extensions/sql-database-project-extension-build-from-command-line?view=sql-server-ver16
     #sqlpackage properties documented here: https://docs.microsoft.com/en-us/sql/tools/sqlpackage/sqlpackage-publish?view=sql-server-ver16#properties-specific-to-the-publish-action
     #also working
     - name: build and deploy project
