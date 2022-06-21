@@ -88,3 +88,7 @@ Example actions in the repository include:
  - windows-action.yml - A Github Windows hosted runner. [windows-action.yml](https://github.com/kebullen/sdksqlproj/blob/main/.github/workflows/windows-action.yml) featuring the Azure [sql-action](https://github.com/Azure/sql-action) from the Windows hosted runner.
 
  - windows-raw.yml - A Github Windows hosted runner. [windows-raw.yml](https://github.com/kebullen/sdksqlproj/blob/main/.github/workflows/windows-raw.yml) builds the .NET project and executes sqlpackage from the Windows hosted runner.
+
+## **Links**
+ - Sqlpackage publish properties - https://docs.microsoft.com/en-us/sql/tools/sqlpackage/sqlpackage-publish?view=sql-server-ver16#properties-specific-to-the-publish-action
+ - Building database projects from the commandline: https://docs.microsoft.com/en-us/sql/azure-data-studio/extensions/sql-database-project-extension-build-from-command-line?view=sql-server-ver16
