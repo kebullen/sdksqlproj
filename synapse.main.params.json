@@ -9,7 +9,7 @@
         "value": "sqlproj"
       },
       "keyVault": {
-        "value": "bicep1-kv"
+        "value": "bicep-kv"
       },   
       "keyVaultUserSecret": {
         "value": "bicep-asw-admin-name"
