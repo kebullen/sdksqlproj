@@ -18,7 +18,7 @@ jobs:
     # Azure login required to add a temporary firewall rule
     - uses: azure/login@v1
       with:
-        creds: ${{secrets.AZURE_CREDENTIALS}}
+        creds: ${{secrets.BICEPRGSP}}
     
     #reading params from a json file (example, a bicep json file)
     - name: reading params from json file
