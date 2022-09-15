@@ -6,7 +6,7 @@ Deploying Azure Synapse Dedicated SQL Pools from GitHub Actions using GitHub hos
 * Github Account
 * Git
 * VS Code (Extensions: SQL Server (mssql))
-* .NET Core SDK 3.1
+* .NET Core SDK 3.1 (https://dotnet.microsoft.com/en-us/download/dotnet/3.1)
 * Azure Account (with an existing Synapse Workspace with Dedicated SQL Pool or Dedicated SQL Pool (Formerly SQL DW))
 * Optional Azure Key Vault for secret storage (otherwise use the Service Principal)
 
